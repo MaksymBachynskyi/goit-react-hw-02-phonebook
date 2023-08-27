@@ -7,7 +7,7 @@ import {
   StyledErrMsg,
   StyledLabel,
   StyledBtn,
-} from './contactForm';
+} from './contactForm.styled';
 
 const MyShema = Yup.object().shape({
   name: Yup.string()

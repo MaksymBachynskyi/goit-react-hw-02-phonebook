@@ -2,7 +2,7 @@ import { Component } from 'react';
 import { Filter } from '../filter/filter';
 import { ContactList } from '../contactList/contactList.jsx';
 import { ContactForm } from '../contactForm/contactForm.jsx';
-import { Container } from './Layout';
+import { Container } from './Layout.styled';
 export class App extends Component {
   state = {
     contacts: [
@@ -15,23 +15,25 @@ export class App extends Component {
   };
   onAddNumber = newNumber => {
     const isIcluded = this.state.contacts.some(item => {
-      return item.name === newNumber.name;
+      return (
+        item.name.toLocaleLowerCase() === newNumber.name.toLocaleLowerCase()
+      );
     });
-    if (!isIcluded) {
-      this.setState(prevSetstate => {
-        return {
-          contacts: [...prevSetstate.contacts, newNumber],
-        };
-      });
-    } else {
+    if (isIcluded) {
       alert(`${newNumber.name} is alredy in contacts`);
+      return;
     }
+    this.setState(prevSetstate => {
+      return {
+        contacts: [...prevSetstate.contacts, newNumber],
+      };
+    });
   };
-  onDelete = e => {
+  onDelete = targetId => {
     this.setState(prevSetstate => {
       return {
         contacts: prevSetstate.contacts.filter(item => {
-          return item.name !== e;
+          return item.id !== targetId;
         }),
       };
     });
@@ -41,20 +43,24 @@ export class App extends Component {
       filter: e.target.value,
     });
   };
-  render() {
-    const filteredList = this.state.contacts.filter(item => {
+  getFiltredMassive = () => {
+    return this.state.contacts.filter(item => {
       const normalize = item.name.toLowerCase();
       const normalizeTarget = this.state.filter.toLowerCase();
       return normalize.includes(normalizeTarget);
     });
-
+  };
+  render() {
     return (
       <Container>
         <h1>Phonebook</h1>
         <ContactForm onAddNumber={this.onAddNumber} />
         <h2>Contacts</h2>
         <Filter onFilter={this.onFilter} />
-        <ContactList contacts={filteredList} onDelete={this.onDelete} />
+        <ContactList
+          contacts={this.getFiltredMassive()}
+          onDelete={this.onDelete}
+        />
       </Container>
     );
   }

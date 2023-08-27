@@ -1,4 +1,4 @@
-import { StyledBtn, Wrapper } from './contactList';
+import { StyledBtn, Wrapper } from './contactList.styled';
 export const ContactList = ({ contacts, onDelete }) => {
   return (
     <div>
@@ -8,7 +8,7 @@ export const ContactList = ({ contacts, onDelete }) => {
             {item.name}: {item.number}
             <StyledBtn
               onClick={() => {
-                onDelete(item.name);
+                onDelete(item.id);
               }}
             >
               Delete
